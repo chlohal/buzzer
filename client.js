@@ -52,9 +52,12 @@
 
         var json = JSON.parse(chunk);
 
-        if (json === "init") resetButton();
-
-        if (json.type == "newRound") {
+        if (json.type == "init") {
+            currentRound = json.round;
+            playing = json.playing;
+            if(playing) startTimer();
+            else resetButton();
+        } else if (json.type == "newRound") {
             currentRound = json.round;
             playing = true;
             startTimer();

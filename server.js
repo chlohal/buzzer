@@ -3,7 +3,7 @@ const { readFileSync } = require("fs");
 var http = require("http");
 const { networkInterfaces } = require("os");
 
-var round = 0;
+var round = 0, playing = false;
 var streams = {};
 
 
@@ -41,6 +41,7 @@ function printLocalIpAddress() {
  */
 function startNewRound(res) {
     round++;
+    playing = true;
     sendUpdate({ type: "newRound", round: round }, res);
 }
 
@@ -57,6 +58,7 @@ function handleRoundEnd(req, res) {
     req.on("end", function () {
         var clientRound = +body || -1;
         if (clientRound == round) {
+            playing = false;
             sendUpdate({ type: "roundEnd", winner: req.url.substring(req.url.lastIndexOf("/") + 1) }, res)
         }
 
@@ -127,7 +129,7 @@ function startUpdateStream(res) {
         "Content-Type": "application/json"
     });
 
-    sendChunk(res, "init");
+    sendChunk(res, {type: "init", round: round, playing: playing});
 
     streams[id] = function (update) {
         sendChunk(res, update);

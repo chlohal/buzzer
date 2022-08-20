@@ -54,20 +54,19 @@
 
         var json = JSON.parse(chunk);
 
-        if (json === "init") resetButton();
-
-        if (json.type == "newRound") {
+        if (json.type == "init") {
+            currentRound = json.round;
+            playing = json.playing;
+        } else if (json.type == "newRound") {
             currentRound = json.round;
             playing = true;
-            resetButton();
-
             addUpdate("Round Start", currentRound + "");
         } else if (json.type == "roundEnd") {
             playing = false;
-            resetButton();
-
             addUpdate("Winner", json.winner);
         }
+
+        resetButton();
     }
 
     function addUpdate(title, content) {
