@@ -5,8 +5,8 @@
     document.addEventListener("DOMContentLoaded", loaded);
     if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") loaded();
 
-    window.addEventListener("load", ()=>loadStream());
-    if(document.readyState === "complete") loadStream();
+    window.addEventListener("load", () => loadStream());
+    if (document.readyState === "complete") loadStream();
 
     function loaded() {
         indicator = document.getElementById("display");
@@ -37,7 +37,7 @@
             for (const c of validChunkDatas.split("\r\n")) {
                 i++;
                 //skip odd-numbered chunks
-                if((i & 1) == 1) continue;
+                if ((i & 1) == 1) continue;
                 else processStreamChunk(c);
             }
         });
@@ -88,12 +88,18 @@
         update.appendChild(time);
         update.appendChild(titleElem);
         update.appendChild(contentElem);
+
+        updates.scrollTo({
+            left: 0,
+            top: updates.scrollHeight,
+            behavior: "smooth"
+        });
     }
 
     function resetButton() {
-        if(!playing) currentRound = -1;
+        if (!playing) currentRound = -1;
 
-        if(currentRound == -1) indicator.textContent = "paused";
+        if (currentRound == -1) indicator.textContent = "paused";
         else indicator.textContent = "round " + currentRound;
     }
 

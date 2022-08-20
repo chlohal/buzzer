@@ -33,21 +33,33 @@ main {
 
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     align-items: flex-end;
 
     list-style-type: none;
 
     overflow: auto;
+    overflow-y: scroll;
 
     font-family: 'JetBrains Mono', monospace;
 
     width: 100%;
 
     gap: 1em;
+
+    scrollbar-width: thin;
+    scrollbar-color: #578aaa transparent;
+}
+
+#updates::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#updates .buttonborder:first-child {
+    margin-top: auto;
 }
 
 #updates .buttonborder {
+    min-height: min-content;
     background: #f0f7fd;
     display: block;
 
