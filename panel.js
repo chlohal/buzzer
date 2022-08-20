@@ -32,7 +32,13 @@
             var validChunkDatas = nextChunk.substring(0, lastCrlnIndex);
             nextChunk = nextChunk.substring(lastCrlnIndex + 2);
 
-            for (const c of validChunkDatas.split("\r\n")) processStreamChunk(c);
+            let i = 0;
+            for (const c of validChunkDatas.split("\r\n")) {
+                i++;
+                //skip odd-numbered chunks
+                if((i & 1) == 1) continue;
+                else processStreamChunk(c);
+            }
         });
         xhr.addEventListener("load", function () {
             loadStream();
@@ -42,6 +48,8 @@
 
     function processStreamChunk(chunk) {
         if (chunk == "") return;
+
+        console.log(chunk);
 
         var json = JSON.parse(chunk);
 

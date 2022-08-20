@@ -18,7 +18,7 @@
 
     function loadStream() {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/updateStream");
+        xhr.open("GET", "/updateStream", true);
 
         var lastChunkIndex = 0;
         var nextChunk = "";
@@ -34,7 +34,13 @@
             var validChunkDatas = nextChunk.substring(0, lastCrlnIndex);
             nextChunk = nextChunk.substring(lastCrlnIndex + 2);
 
-            for (const c of validChunkDatas.split("\r\n")) processStreamChunk(c);
+            let i = 0;
+            for (const c of validChunkDatas.split("\r\n")) {
+                i++;
+                //skip odd-numbered chunks
+                if((i & 1) == 1) continue;
+                else processStreamChunk(c);
+            }
         });
         xhr.addEventListener("load", function () {
             loadStream();

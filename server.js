@@ -127,10 +127,10 @@ function startUpdateStream(res) {
         "Content-Type": "application/json"
     });
 
-    res.write("\"init\"\r\n");
+    sendChunk(res, "init");
 
     streams[id] = function (update) {
-        res.write(JSON.stringify(update) + "\r\n");
+        sendChunk(res, update);
     }
 
     function eraseStream() {
@@ -143,6 +143,17 @@ function startUpdateStream(res) {
     res.on("close", eraseStream);
     res.on("error", eraseStream);
     setTimeout(eraseStream, 30000);
+}
+
+/**
+ * 
+ * @param {http.ServerResponse} res 
+ * @param {*} chunk 
+ */
+function sendChunk(res, chunk) {
+    var json = JSON.stringify(chunk);
+
+    res.write(json.length.toString(16) + "\r\n" + json + "\r\n");
 }
 
 server.listen(PORT);
