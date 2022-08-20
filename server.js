@@ -54,13 +54,16 @@ function sendUpdate(up, res) {
     }).end("");
 }
 
+const ALLOWED_URLS = new Set(["/client.js", "/client.css", "/panel", "/panel.js", "/panel.css"])
+
 /**
  * @param {string} url
  * @param {http.ServerResponse} res 
  */
 function sendLocalFile(url, res) {
+    if (ALLOWED_URLS.has(url) == false) url = "/index.html";
 
-    if (url != "/script.js" && url != "/style.css") url = "/index.html";
+    if(url.indexOf(".") == -1) url += ".html";
 
     const file = readFileSync(__dirname + url);
 
