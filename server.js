@@ -61,7 +61,7 @@ const ALLOWED_URLS = new Set(["/client.js", "/client.css", "/panel", "/panel.js"
  * @param {http.ServerResponse} res 
  */
 function sendLocalFile(url, res) {
-    if (ALLOWED_URLS.has(url) == false) url = "/index.html";
+    if (ALLOWED_URLS.has(url) == false) url = "/client.html";
 
     if(url.indexOf(".") == -1) url += ".html";
 
