@@ -63,7 +63,7 @@
             addUpdate("Round Start", currentRound + "");
         } else if (json.type == "roundEnd") {
             playing = false;
-            addUpdate("Winner", json.winner);
+            addUpdate("Button Push", json.winner);
         }
 
         resetButton();
