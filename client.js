@@ -1,12 +1,13 @@
 (function () {
     var currentRound = -1, playing = false;
-    var indicator, button;
+    var indicator, button, buzzer;
 
     document.addEventListener("DOMContentLoaded", loaded);
     if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") loaded();
 
     function loaded() {
         indicator = document.getElementById("display");
+        buzzer = document.getElementById("buzz");
         button = document.getElementById("button");
         button.addEventListener("click", sendWin);
 
@@ -82,6 +83,8 @@
 
     function sendWin() {
         if (!playing) return;
+
+        buzzer.play();
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/roundEnd" + window.location.pathname);

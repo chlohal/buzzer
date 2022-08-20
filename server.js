@@ -81,7 +81,7 @@ function sendUpdate(up, res) {
     }).end("");
 }
 
-const ALLOWED_URLS = new Set(["/client.js", "/client.css", "/panel", "/panel.js", "/panel.css"])
+const ALLOWED_URLS = new Set(["/client.js", "/client.css", "/panel", "/panel.js", "/panel.css", "/buzz.wav"])
 
 /**
  * @param {string} url
