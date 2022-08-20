@@ -7,23 +7,27 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
     <meta name="HandheldFriendly" content="true">
-    <title>mark :/</title>
+    <title>buzz</title>
+    
+    <script>
+        if(window.location.pathname == "/") window.location.pathname = encodeURIComponent(prompt("enter a name"));
+    </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 
-    <script src="script.js"></script>
+    <script src="/script.js" async></script>
 </head>
 
 <body>
     <span id="buttonborder">
         <span id="buttoncontainer">
-            <button id="button"></button>
+            <button id="button" style="filter:grayscale(1) opacity(0.5)"></button>
         </span>
         
-        <span id="display">&nbsp;</span>
+        <span id="display">paused</span>
     </span>
 </body>
 

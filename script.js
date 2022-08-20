@@ -1,52 +1,97 @@
 (function () {
-    var count;
+    var currentRound = -1, playing = false;
     var indicator, button;
-    var KV_URL = function () {
-        var d = new Date();
-        return "https://kvdb.io/idEoxdoHhJZkDtnQqVqu4/marksuscount" + "-" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
-    };
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", loaded);
+    if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") loaded();
+
+    function loaded() {
         indicator = document.getElementById("display");
         button = document.getElementById("button");
-        button.addEventListener("click", add);
-    });
+        button.addEventListener("click", sendWin);
 
-    loadMarkCount();
+        console.log("dcl!");
 
-    setInterval(loadMarkCount, 30000);
+        loadStream();
+    }
 
-    function loadMarkCount() {
-        if (indicator) indicator.textContent = "\u2026";
+    function loadStream() {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", KV_URL());
-        xhr.onload = function () {
-            if (xhr.status == 200) count = parseInt(xhr.responseText);
-            else count = 0;
-            if (indicator) indicator.textContent = format(count);
-        }
+        xhr.open("GET", "/updateStream");
+
+        var lastChunkIndex = 0;
+        var nextChunk = "";
+        xhr.addEventListener("progress", function (e) {
+            var str = xhr.responseText.substring(lastChunkIndex);
+            lastChunkIndex += str.length;
+
+            nextChunk += str;
+
+            var lastCrlnIndex = nextChunk.lastIndexOf("\r\n");
+            if (lastChunkIndex == -1) return;
+
+            var validChunkDatas = nextChunk.substring(0, lastCrlnIndex);
+            nextChunk = nextChunk.substring(lastCrlnIndex + 2);
+
+            for (const c of validChunkDatas.split("\r\n")) processStreamChunk(c);
+        });
+        xhr.addEventListener("load", function () {
+            loadStream();
+        })
         xhr.send();
     }
 
-    function add() {
-        if (indicator) indicator.textContent = "\u2026";
-        var xhr = new XMLHttpRequest();
-        xhr.open("PATCH", KV_URL());
-        xhr.onload = function () {
-            if (xhr.status == 200) count = parseInt(xhr.responseText);
-            if (indicator) indicator.textContent = format(count);
+    function processStreamChunk(chunk) {
+        if (chunk == "") return;
+
+        var json = JSON.parse(chunk);
+
+        if (json === "init") resetButton();
+
+        if (json.type == "newRound") {
+            currentRound = json.round;
+            playing = true;
+            startTimer();
+        } else if (json.type == "roundEnd") {
+            resetButton();
         }
-        xhr.send("+1");
     }
 
-    function format(n) {
-        var numstr = Math.floor(n || 0).toString();
-        var r = "";
-        var i = numstr.length - 3
-        for (; i >= 0; i -= 3) {
-            r = (i > 0 ? "," : "") + numstr.substring(i, i + 3) + r;
-        }
-        r = numstr.substring(0, i + 3) + r;
-        return r;
+    function resetButton() {
+        button.style.filter = "grayscale(1) opacity(0.5)";
+        playing = false;
+        currentRound = -1;
+    }
+
+    function startTimer() {
+        let r = currentRound;
+        let originalTime = -1;
+
+        button.style.filter = "";
+
+        requestAnimationFrame(function anim() {
+            let t = Date.now();
+
+            if (originalTime === -1) originalTime = t;
+
+            indicator.textContent = fmtMilliseconds(t - originalTime);
+
+            if (r === currentRound) requestAnimationFrame(anim)
+        })
+    }
+
+    function sendWin() {
+        if (!playing) return;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/roundEnd" + window.location.pathname);
+        xhr.send("" + currentRound);
+    }
+
+    function fmtMilliseconds(n) {
+        var decaseconds = Math.round(n / 100) / 10;
+
+        if (decaseconds === (decaseconds | 0)) return "" + decaseconds + ".0s";
+        else return "" + decaseconds + "s";
     }
 })();

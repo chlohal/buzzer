@@ -28,7 +28,6 @@ body {
 #display {
     margin-top: 1em;
     padding: 0.25em 0.75em;
-    display: block;
     font-size: 16pt;
     font-family: 'JetBrains Mono', monospace;
     font-weight: bold;
@@ -36,6 +35,8 @@ body {
     border: 0.25rem solid #778089;
     border-radius: 0.25rem;
     display: block;
+    width: 9em;
+    text-align: center;
 }
 
 button {
@@ -58,6 +59,8 @@ button {
     transition: box-shadow 0.2s;
     font-family: 'JetBrains Mono', monospace;
     font-weight: bold;
+    
+    transition: filter 0.1s;
 }
 button:focus {
     outline: none;
