@@ -1,6 +1,6 @@
 (function () {
     var currentRound = -1, playing = false;
-    var indicator, button;
+    var indicator, button, updates;
 
     document.addEventListener("DOMContentLoaded", loaded);
     if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") loaded();
@@ -8,9 +8,8 @@
     function loaded() {
         indicator = document.getElementById("display");
         button = document.getElementById("button");
-        button.addEventListener("click", sendWin);
-
-        console.log("dcl!");
+        updates = document.getElementById("updates");
+        button.addEventListener("click", sendRoundStart);
 
         loadStream();
     }
@@ -51,41 +50,50 @@
         if (json.type == "newRound") {
             currentRound = json.round;
             playing = true;
-            startTimer();
-        } else if (json.type == "roundEnd") {
             resetButton();
+
+            addUpdate("Round Start", currentRound + "");
+        } else if (json.type == "roundEnd") {
+            playing = false;
+            resetButton();
+
+            addUpdate("Winner", json.winner);
         }
     }
 
+    function addUpdate(title, content) {
+        var update = document.createElement("li");
+        update.classList.add("buttonborder");
+        updates.appendChild(update);
+
+        var time = document.createElement("span");
+        time.classList.add("time");
+        time.textContent = (new Date()).toLocaleTimeString();
+
+        var titleElem = document.createElement("h2");
+        titleElem.textContent = title;
+
+        var contentElem = document.createElement("span");
+        contentElem.classList.add("content");
+        contentElem.textContent = content;
+
+        update.appendChild(time);
+        update.appendChild(titleElem);
+        update.appendChild(contentElem);
+    }
+
     function resetButton() {
-        button.style.filter = "grayscale(1) opacity(0.5)";
-        playing = false;
-        currentRound = -1;
+        if(!playing) currentRound = -1;
+
+        if(currentRound == -1) indicator.textContent = "paused";
+        else indicator.textContent = "round " + currentRound;
     }
 
-    function startTimer() {
-        let r = currentRound;
-        let originalTime = -1;
-
-        button.style.filter = "";
-
-        requestAnimationFrame(function anim() {
-            let t = Date.now();
-
-            if (originalTime === -1) originalTime = t;
-
-            indicator.textContent = fmtMilliseconds(t - originalTime);
-
-            if (r === currentRound) requestAnimationFrame(anim)
-        })
-    }
-
-    function sendWin() {
-        if (!playing) return;
+    function sendRoundStart() {
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/roundEnd" + window.location.pathname);
-        xhr.send("" + currentRound);
+        xhr.open("GET", "/newRound");
+        xhr.send();
     }
 
     function fmtMilliseconds(n) {

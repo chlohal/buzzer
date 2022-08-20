@@ -1,8 +1,14 @@
+const PORT = 5556;
 const { readFileSync } = require("fs");
 var http = require("http");
+const { networkInterfaces } = require("os");
 
 var round = 0;
 var streams = {};
+
+
+printLocalIpAddress();
+
 
 var server = http.createServer(function (req, res) {
     var url = new URL(req.url, "http://localhost");
@@ -12,6 +18,27 @@ var server = http.createServer(function (req, res) {
     else sendLocalFile(url.pathname, res);
 });
 
+function printLocalIpAddress() {
+    const addrs = networkInterfaces();
+
+    const ips = [];
+
+    for (const iname in addrs) {
+        for (const c of addrs[iname]) {
+            if (c.family == "IPv4" || c.family == 4) {
+                ips.push(c.address);
+            }
+        }
+    }
+
+    console.log("Connect on one of the below:");
+    for(const i of ips) console.log("- " + i + ":" + PORT);
+}
+
+/**
+ * 
+ * @param {http.ServerResponse} res 
+ */
 function startNewRound(res) {
     round++;
     sendUpdate({ type: "newRound", round: round }, res);
@@ -30,7 +57,7 @@ function handleRoundEnd(req, res) {
     req.on("end", function () {
         var clientRound = +body || -1;
         if (clientRound == round) {
-            sendUpdate({ type: "roundEnd", winner: req.url }, res)
+            sendUpdate({ type: "roundEnd", winner: req.url.substring(req.url.lastIndexOf("/") + 1) }, res)
         }
 
         res.writeHead("201", "No Content", {
@@ -63,7 +90,7 @@ const ALLOWED_URLS = new Set(["/client.js", "/client.css", "/panel", "/panel.js"
 function sendLocalFile(url, res) {
     if (ALLOWED_URLS.has(url) == false) url = "/client.html";
 
-    if(url.indexOf(".") == -1) url += ".html";
+    if (url.indexOf(".") == -1) url += ".html";
 
     const file = readFileSync(__dirname + url);
 
@@ -118,4 +145,4 @@ function startUpdateStream(res) {
     setTimeout(eraseStream, 30000);
 }
 
-server.listen("5556");
+server.listen(PORT);

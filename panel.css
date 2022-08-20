@@ -8,25 +8,100 @@ body {
     height: 100vh;
     width: 100vw;
     margin: 0;
-    
-    justify-content: center;
-    align-items: center;
-
-    overflow: hidden;
-    flex-direction: column;
 }
 
-#buttonborder {
+main {
+    display: flex;
+    height: 100%;
+    margin: auto;
+
+    justify-content: flex-start;
+    align-items: center;
+
+    flex-direction: column;
+
+    gap: 1em;
+
+    overflow: hidden;
+}
+
+#updates {
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    list-style-type: none;
+
+    overflow: auto;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    width: 100%;
+
+    gap: 1em;
+}
+
+#updates .buttonborder {
+    background: #f0f7fd;
+    display: block;
+
+    width: 100%;
+
+    border-radius: 0em;
+    position: relative;
+    overflow: hidden;
+    
+    padding-right: 2em;
+
+    flex-shrink: 0;
+}
+
+#updates .buttonborder::after {
+    border: 2em transparent solid;
+    border-right-color: #578aaa;
+
+    position: absolute;
+    top: -2em;
+    right: 0;
+
+    width: 0em;
+    height: 0em;
+    display: block;
+
+    content: "";
+}
+
+#updates .buttonborder h2 {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+}
+
+#updates .time {
+    font-size: 0.7em;
+}
+
+#updates .content {
+    font-size: 1.25em;
+}
+
+.buttonborder {
+    gap: 1em;
+    display: flex;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     padding: 1em;
     border-radius: 1em;
     background: linear-gradient(45deg, #362610 0%, #362610 10%, #fd9805 10%, #fd9805 20%,#362610 20%, #362610 30%, #fd9805 30%, #fd9805 40%,#362610 40%, #362610 50%, #fd9805 50%, #fd9805 60%,#362610 60%, #362610 70%, #fd9805 70%, #fd9805 80%,#362610 80%, #362610 90%, #fd9805 90%, #fd9805 100%,#362610 100%);
 }
 
 #display {
-    margin-top: 1em;
     padding: 0.25em 0.75em;
     font-size: 16pt;
     font-family: 'JetBrains Mono', monospace;
@@ -45,8 +120,8 @@ button {
     color: #d1dde7;
     border: 0.5rem solid #491722;
 
-    width: 7.5em;
-    height: 7.5em;
+    width: 2.5em;
+    height: 2.5em;
     max-width: 75vmin;
     max-height: 75vmin;
 
