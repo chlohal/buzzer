@@ -5,7 +5,7 @@
     document.addEventListener("DOMContentLoaded", loaded);
     if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") loaded();
 
-    document.addEventListener("load", loadStream);
+    window.addEventListener("load", ()=>loadStream());
     if(document.readyState === "complete") loadStream();
 
     function loaded() {
