@@ -1,0 +1,108 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    overflow-x: hidden;
+}
+
+body {
+    background: #427ca1;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    
+    justify-content: center;
+    align-items: center;
+
+    overflow-x: hidden;
+    flex-direction: column;
+}
+
+.buttonborder * {
+    backface-visibility: hidden;
+}
+
+.buttonborder {
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+    border-radius: 1em;
+    background: linear-gradient(45deg, #362610 0%, #362610 10%, #fd9805 10%, #fd9805 20%,#362610 20%, #362610 30%, #fd9805 30%, #fd9805 40%,#362610 40%, #362610 50%, #fd9805 50%, #fd9805 60%,#362610 60%, #362610 70%, #fd9805 70%, #fd9805 80%,#362610 80%, #362610 90%, #fd9805 90%, #fd9805 100%,#362610 100%);
+}
+
+.display {
+    margin-top: 1em;
+    padding: 0.25em 0.75em;
+    display: block;
+    font-size: 16pt;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    background: #d1dde7;
+    border: 0.25rem solid #778089;
+    border-radius: 0.25rem;
+    display: block;
+}
+
+button {
+    font-size: 32pt;
+    background: hsl(0, 73%, 42%);
+    color: #d1dde7;
+    border: 0.5rem solid #491722;
+
+    width: 7.5em;
+    height: 7.5em;
+    max-width: 75vmin;
+    max-height: 75vmin;
+
+    overflow: hidden;
+    text-align: center;
+
+    border-radius: 100%;
+    display: inline-block;
+    box-shadow: 0 0 0.2em 0 #362610aa, 0 0 0em 0 #362610aa inset;
+    transition: box-shadow 0.2s;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+}
+button:focus {
+    outline: none;
+}
+button:hover {
+    outline: none;
+    box-shadow: 0 0em 0em 0 #362610aa, 0 0 0em 0 #362610aa inset;
+}
+
+button:active {
+    box-shadow: 0 0em 0em 0 #362610aa, 0 0 0.2em 0 #362610aa inset;
+}
+
+#buttons {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    transform-style: preserve-3d;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    transform-origin: center;
+}
+
+#buttons li {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    
+}
+
+main {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
