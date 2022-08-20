@@ -21,6 +21,7 @@ main {
     flex-direction: column;
 
     gap: 1em;
+    padding-bottom: 1em;
 
     overflow: hidden;
 }
@@ -59,6 +60,8 @@ main {
     padding-right: 2em;
 
     flex-shrink: 0;
+
+    border: 2px solid #578aaa;
 }
 
 #updates .buttonborder::after {
