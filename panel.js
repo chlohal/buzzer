@@ -5,13 +5,14 @@
     document.addEventListener("DOMContentLoaded", loaded);
     if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") loaded();
 
+    document.addEventListener("load", loadStream);
+    if(document.readyState === "complete") loadStream();
+
     function loaded() {
         indicator = document.getElementById("display");
         button = document.getElementById("button");
         updates = document.getElementById("updates");
         button.addEventListener("click", sendRoundStart);
-
-        loadStream();
     }
 
     function loadStream() {
