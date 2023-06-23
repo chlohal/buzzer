@@ -12,6 +12,8 @@
         indicator = document.getElementById("display");
         buzzer = document.getElementById("buzz");
         button = document.getElementById("button");
+        button.addEventListener("touchstart", sendWin);
+        button.addEventListener("mousedown", sendWin);
         button.addEventListener("click", sendWin);
     }
 
